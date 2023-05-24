@@ -1,22 +1,17 @@
-# Aksio Application Model
+# Aksio MongoDB Extensions
 
 ## Packages / Deployables
 
-[![Nuget](https://img.shields.io/nuget/v/Aksio.Applications?logo=nuget)](http://nuget.org/packages/aksio.applications)
-[![NPM](https://img.shields.io/npm/v/@aksio/applications?label=@aksio/applications&logo=npm)](https://www.npmjs.com/package/@aksio/applications)
+[![Nuget](https://img.shields.io/nuget/v/Aksio.MongoDB?logo=nuget)](http://nuget.org/packages/aksio.mongodb)
 
 ## Builds
 
-[![.NET Build](https://github.com/aksio-insurtech/Fundamentals/actions/workflows/dotnet-build.yml/badge.svg)](https://github.com/aksio-insurtech/Fundamentals/actions/workflows/dotnet-build.yml)
-[![JavaScript Build](https://github.com/aksio-insurtech/Fundamentals/actions/workflows/javascript-build.yml/badge.svg)](https://github.com/aksio-insurtech/Fundamentals/actions/workflows/javascript-build.yml)
+[![.NET Build](https://github.com/aksio-insurtech/MongoDB/actions/workflows/dotnet-build.yml/badge.svg)](https://github.com/aksio-insurtech/MongoDB/actions/workflows/dotnet-build.yml)
 
 ## Description
 
-The Aksio Application model represents an opinionated approach to building consistent applications based on the concepts behind CQRS.
-It offers extensions for different frameworks and is built on top of ASP.NET Core. One of the traits the application model has is the
-bridging between the backend and the frontend. The application model provides a tool, called **ProxyGenerator** that hooks into the
-C# Roslyn compiler and generates TypeScript code for recognized artifacts matching the criteria of what is considered a **commmand** or
-a **query**.
+The Aksio MongoDB extension provides utilities to make it easier to work with MongoDB in application development.
+It provides convenience methods and introduces concepts to make application development more maintainable.
 
 ## Central Package Management
 
