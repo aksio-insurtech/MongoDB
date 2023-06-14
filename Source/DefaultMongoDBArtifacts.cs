@@ -11,6 +11,12 @@ namespace Aksio.MongoDB;
 /// </summary>
 public class DefaultMongoDBArtifacts : IMongoDBArtifacts
 {
+    /// <inheritdoc/>
+    public IEnumerable<Type> ClassMaps { get; }
+
+    /// <inheritdoc/>
+    public IEnumerable<Type> ConventionPackFilters { get; }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="DefaultMongoDBArtifacts"/> class.
     /// </summary>
@@ -20,10 +26,4 @@ public class DefaultMongoDBArtifacts : IMongoDBArtifacts
         ClassMaps = assemblies.DefinedTypes.Where(_ => _.HasInterface(typeof(IBsonClassMapFor<>))).ToArray();
         ConventionPackFilters = assemblies.DefinedTypes.Where(_ => _.HasInterface(typeof(ICanFilterMongoDBConventionPacksForType))).ToArray();
     }
-
-    /// <inheritdoc/>
-    public IEnumerable<Type> ClassMaps { get; }
-
-    /// <inheritdoc/>
-    public IEnumerable<Type> ConventionPackFilters { get; }
 }
