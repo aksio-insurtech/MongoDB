@@ -4,6 +4,7 @@
 using System.Reflection;
 using System.Text.Json;
 using Aksio.Execution;
+using Aksio.Json;
 using Aksio.Serialization;
 using Aksio.Types;
 using MongoDB.Bson;
@@ -22,25 +23,28 @@ public class MongoDBDefaults
     static readonly object _lockObject = new();
     static bool _initialized;
     readonly IEnumerable<ICanFilterMongoDBConventionPacksForType> _conventionPackFilters;
-    readonly ITypes _types;
+    readonly IMongoDBArtifacts _mongoDBArtifacts;
     readonly IDerivedTypes _derivedTypes;
     readonly JsonSerializerOptions _jsonSerializerOptions;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MongoDBDefaults"/> class.
     /// </summary>
-    /// <param name="types"><see cref="ITypes"/> for general type discovery.</param>
-    /// <param name="derivedTypes"><see cref="IDerivedTypes"/> in the system.</param>
-    /// <param name="jsonSerializerOptions">The <see cref="JsonSerializerOptions"/> to use.</param>
-    public MongoDBDefaults(ITypes types, IDerivedTypes derivedTypes, JsonSerializerOptions jsonSerializerOptions)
+    /// <param name="mongoDBArtifacts">Optional <see cref="IMongoDBArtifacts"/> to use. Will default to <see cref="DefaultMongoDBArtifacts"/> which discovers at runtime.</param>
+    /// <param name="derivedTypes">Optional <see cref="IDerivedTypes"/> in the system.</param>
+    /// <param name="jsonSerializerOptions">Optional The <see cref="JsonSerializerOptions"/> to use.</param>
+    public MongoDBDefaults(IMongoDBArtifacts? mongoDBArtifacts = default, IDerivedTypes? derivedTypes = default, JsonSerializerOptions? jsonSerializerOptions = default)
     {
-        _conventionPackFilters = types
-            .FindMultiple<ICanFilterMongoDBConventionPacksForType>()
+        mongoDBArtifacts ??= new DefaultMongoDBArtifacts(ProjectReferencedAssemblies.Instance);
+        derivedTypes ??= DerivedTypes.Instance;
+
+        _conventionPackFilters = mongoDBArtifacts
+            .ConventionPackFilters
             .Select(_ => (Activator.CreateInstance(_) as ICanFilterMongoDBConventionPacksForType)!)
             .ToArray();
-        _types = types;
+        _mongoDBArtifacts = mongoDBArtifacts;
         _derivedTypes = derivedTypes;
-        _jsonSerializerOptions = jsonSerializerOptions;
+        _jsonSerializerOptions = jsonSerializerOptions ?? Globals.JsonSerializerOptions;
     }
 
     /// <summary>
@@ -88,7 +92,7 @@ public class MongoDBDefaults
 
     void RegisterClassMaps()
     {
-        foreach (var classMapType in _types.FindMultiple(typeof(IBsonClassMapFor<>)))
+        foreach (var classMapType in _mongoDBArtifacts.ClassMaps)
         {
             var classMapProvider = Activator.CreateInstance(classMapType);
             var typeInterfaces = classMapType.GetInterfaces().Where(_ =>
