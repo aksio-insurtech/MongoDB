@@ -1,3 +1,10 @@
+# [v1.0.4] - 2023-6-19 [PR: #2](https://github.com/aksio-insurtech/MongoDB/pull/2)
+
+### Fixed
+
+- Upgraded Aksio Fundmantals
+
+
 # [v1.0.3] - 2023-6-16 [PR: #0]()
 
 No release notes
