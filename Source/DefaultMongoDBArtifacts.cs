@@ -1,7 +1,6 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Aksio.Reflection;
 using Aksio.Types;
 
 namespace Aksio.MongoDB;
@@ -20,10 +19,10 @@ public class DefaultMongoDBArtifacts : IMongoDBArtifacts
     /// <summary>
     /// Initializes a new instance of the <see cref="DefaultMongoDBArtifacts"/> class.
     /// </summary>
-    /// <param name="assemblies"><see cref="ICanProvideAssembliesForDiscovery"/> for discovering types.</param>
-    public DefaultMongoDBArtifacts(ICanProvideAssembliesForDiscovery assemblies)
+    /// <param name="types"><see cref="ITypes"/> for discovering types.</param>
+    public DefaultMongoDBArtifacts(ITypes types)
     {
-        ClassMaps = assemblies.DefinedTypes.Where(_ => _.HasInterface(typeof(IBsonClassMapFor<>))).ToArray();
-        ConventionPackFilters = assemblies.DefinedTypes.Where(_ => _.HasInterface(typeof(ICanFilterMongoDBConventionPacksForType))).ToArray();
+        ClassMaps = types.FindMultiple(typeof(IBsonClassMapFor<>));
+        ConventionPackFilters = types.FindMultiple(typeof(ICanFilterMongoDBConventionPacksForType));
     }
 }

@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text.Json;
 using Aksio.Json;
 using Aksio.Serialization;
-using Aksio.Types;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
@@ -37,7 +36,7 @@ public static class MongoDBDefaults
             }
             _initialized = true;
 
-            mongoDBArtifacts ??= new DefaultMongoDBArtifacts(ProjectReferencedAssemblies.Instance);
+            mongoDBArtifacts ??= new DefaultMongoDBArtifacts(Types.Types.Instance);
             derivedTypes ??= DerivedTypes.Instance;
 
             var conventionPackFilters = mongoDBArtifacts
