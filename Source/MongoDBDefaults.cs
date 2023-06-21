@@ -93,7 +93,7 @@ public static class MongoDBDefaults
                 return false;
             });
 
-            var method = typeof(MongoDBDefaults).GetMethod(nameof(Register), BindingFlags.Instance | BindingFlags.NonPublic)!;
+            var method = typeof(MongoDBDefaults).GetMethod(nameof(Register), BindingFlags.Static | BindingFlags.NonPublic)!;
             foreach (var type in typeInterfaces)
             {
                 var genericMethod = method.MakeGenericMethod(type.GenericTypeArguments[0]);
