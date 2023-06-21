@@ -1,3 +1,10 @@
+# [v1.0.9] - 2023-6-21 [PR: #7](https://github.com/aksio-insurtech/MongoDB/pull/7)
+
+### Fixed
+
+- Fixing the hookup of class maps. After refactoring the calling of the generic `Register` method is now static and not an instance method.
+
+
 # [v1.0.8] - 2023-6-21 [PR: #6](https://github.com/aksio-insurtech/MongoDB/pull/6)
 
 ### Fixed
