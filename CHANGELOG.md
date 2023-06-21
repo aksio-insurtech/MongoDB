@@ -1,3 +1,10 @@
+# [v1.0.8] - 2023-6-21 [PR: #6](https://github.com/aksio-insurtech/MongoDB/pull/6)
+
+### Fixed
+
+- Switching to use the `ITypes` default instance for the `DefaultMongoDBArtifacts` instead of just the project referenced assemblies. This way we are guaranteed all types we want.
+
+
 # [v1.0.7] - 2023-6-21 [PR: #5](https://github.com/aksio-insurtech/MongoDB/pull/5)
 
 ### Fixed
