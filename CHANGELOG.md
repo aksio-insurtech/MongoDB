@@ -1,3 +1,10 @@
+# [v1.0.7] - 2023-6-21 [PR: #5](https://github.com/aksio-insurtech/MongoDB/pull/5)
+
+### Fixed
+
+- Changing initialization of MongoDB defaults to be a static operation at startup that should only happen once. 
+
+
 # [v1.0.6] - 2023-6-20 [PR: #4](https://github.com/aksio-insurtech/MongoDB/pull/4)
 
 ### Fixed
