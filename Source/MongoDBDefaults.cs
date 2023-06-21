@@ -21,7 +21,6 @@ namespace Aksio.MongoDB;
 public class MongoDBDefaults
 {
     static readonly object _lockObject = new();
-    static bool _initialized;
     readonly IEnumerable<ICanFilterMongoDBConventionPacksForType> _conventionPackFilters;
     readonly IMongoDBArtifacts _mongoDBArtifacts;
     readonly IDerivedTypes _derivedTypes;
@@ -45,16 +44,12 @@ public class MongoDBDefaults
         _mongoDBArtifacts = mongoDBArtifacts;
         _derivedTypes = derivedTypes;
         _jsonSerializerOptions = jsonSerializerOptions ?? Globals.JsonSerializerOptions;
+
+        Initialize();
     }
 
-    /// <summary>
-    /// Initialize the defaults.
-    /// </summary>
-    public void Initialize()
+    void Initialize()
     {
-        if (_initialized) return;
-        _initialized = true;
-
         lock (_lockObject)
         {
             BsonSerializer

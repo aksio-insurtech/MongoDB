@@ -29,7 +29,6 @@ public static class HostBuilderExtensions
     {
         var defaults = new MongoDBDefaults(mongoDBArtifacts, derivedTypes, jsonSerializerOptions);
         builder.ConfigureServices(_ => _.AddSingleton(defaults));
-        defaults.Initialize();
         return builder;
     }
 }
