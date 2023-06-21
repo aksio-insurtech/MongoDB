@@ -3,7 +3,6 @@
 
 using System.Reflection;
 using System.Text.Json;
-using Aksio.Execution;
 using Aksio.Json;
 using Aksio.Serialization;
 using Aksio.Types;
@@ -17,41 +16,36 @@ namespace Aksio.MongoDB;
 /// <summary>
 /// Represents the setup of MongoDB defaults.
 /// </summary>
-[Singleton]
-public class MongoDBDefaults
+public static class MongoDBDefaults
 {
-    static readonly object _lockObject = new();
-    readonly IEnumerable<ICanFilterMongoDBConventionPacksForType> _conventionPackFilters;
-    readonly IMongoDBArtifacts _mongoDBArtifacts;
-    readonly IDerivedTypes _derivedTypes;
-    readonly JsonSerializerOptions _jsonSerializerOptions;
+    static readonly object _lock = new();
+    static bool _initialized;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MongoDBDefaults"/> class.
+    /// Initializes the MongoDB defaults.
     /// </summary>
     /// <param name="mongoDBArtifacts">Optional <see cref="IMongoDBArtifacts"/> to use. Will default to <see cref="DefaultMongoDBArtifacts"/> which discovers at runtime.</param>
     /// <param name="derivedTypes">Optional <see cref="IDerivedTypes"/> in the system.</param>
     /// <param name="jsonSerializerOptions">Optional The <see cref="JsonSerializerOptions"/> to use.</param>
-    public MongoDBDefaults(IMongoDBArtifacts? mongoDBArtifacts = default, IDerivedTypes? derivedTypes = default, JsonSerializerOptions? jsonSerializerOptions = default)
+    public static void Initialize(IMongoDBArtifacts? mongoDBArtifacts = default, IDerivedTypes? derivedTypes = default, JsonSerializerOptions? jsonSerializerOptions = default)
     {
-        mongoDBArtifacts ??= new DefaultMongoDBArtifacts(ProjectReferencedAssemblies.Instance);
-        derivedTypes ??= DerivedTypes.Instance;
-
-        _conventionPackFilters = mongoDBArtifacts
-            .ConventionPackFilters
-            .Select(_ => (Activator.CreateInstance(_) as ICanFilterMongoDBConventionPacksForType)!)
-            .ToArray();
-        _mongoDBArtifacts = mongoDBArtifacts;
-        _derivedTypes = derivedTypes;
-        _jsonSerializerOptions = jsonSerializerOptions ?? Globals.JsonSerializerOptions;
-
-        Initialize();
-    }
-
-    void Initialize()
-    {
-        lock (_lockObject)
+        lock (_lock)
         {
+            if (_initialized)
+            {
+                return;
+            }
+            _initialized = true;
+
+            mongoDBArtifacts ??= new DefaultMongoDBArtifacts(ProjectReferencedAssemblies.Instance);
+            derivedTypes ??= DerivedTypes.Instance;
+
+            var conventionPackFilters = mongoDBArtifacts
+                .ConventionPackFilters
+                .Select(_ => (Activator.CreateInstance(_) as ICanFilterMongoDBConventionPacksForType)!)
+                .ToArray();
+            jsonSerializerOptions ??= Globals.JsonSerializerOptions;
+
             BsonSerializer
                 .RegisterSerializationProvider(new ConceptSerializationProvider());
             BsonSerializer
@@ -71,23 +65,23 @@ public class MongoDBDefaults
             BsonSerializer
                 .RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
-            foreach (var derivedType in _derivedTypes.TypesWithDerivatives)
+            foreach (var derivedType in derivedTypes.TypesWithDerivatives)
             {
-                BsonSerializer.RegisterDiscriminatorConvention(derivedType, new DerivedTypeDiscriminatorConvention(_derivedTypes));
+                BsonSerializer.RegisterDiscriminatorConvention(derivedType, new DerivedTypeDiscriminatorConvention(derivedTypes));
             }
             BsonSerializer
-                .RegisterSerializationProvider(new DerivedTypeSerializerProvider(_derivedTypes, _jsonSerializerOptions));
+                .RegisterSerializationProvider(new DerivedTypeSerializerProvider(derivedTypes, jsonSerializerOptions));
 
-            RegisterConventionAsPack(ConventionPacks.CamelCase, new CamelCaseElementNameConvention());
-            RegisterConventionAsPack(ConventionPacks.IgnoreExtraElements, new IgnoreExtraElementsConvention(true));
+            RegisterConventionAsPack(conventionPackFilters, ConventionPacks.CamelCase, new CamelCaseElementNameConvention());
+            RegisterConventionAsPack(conventionPackFilters, ConventionPacks.IgnoreExtraElements, new IgnoreExtraElementsConvention(true));
 
-            RegisterClassMaps();
+            RegisterClassMaps(mongoDBArtifacts);
         }
     }
 
-    void RegisterClassMaps()
+    static void RegisterClassMaps(IMongoDBArtifacts mongoDBArtifacts)
     {
-        foreach (var classMapType in _mongoDBArtifacts.ClassMaps)
+        foreach (var classMapType in mongoDBArtifacts.ClassMaps)
         {
             var classMapProvider = Activator.CreateInstance(classMapType);
             var typeInterfaces = classMapType.GetInterfaces().Where(_ =>
@@ -104,12 +98,12 @@ public class MongoDBDefaults
             foreach (var type in typeInterfaces)
             {
                 var genericMethod = method.MakeGenericMethod(type.GenericTypeArguments[0]);
-                genericMethod.Invoke(this, new[] { classMapProvider });
+                genericMethod.Invoke(null, new[] { classMapProvider });
             }
         }
     }
 
-    void Register<T>(IBsonClassMapFor<T> classMapProvider)
+    static void Register<T>(IBsonClassMapFor<T> classMapProvider)
     {
         if (BsonClassMap.IsClassMapRegistered(typeof(T)))
         {
@@ -118,15 +112,15 @@ public class MongoDBDefaults
         BsonClassMap.RegisterClassMap<T>(_ => classMapProvider.Configure(_));
     }
 
-    void RegisterConventionAsPack(string name, IConvention convention)
+    static void RegisterConventionAsPack(IEnumerable<ICanFilterMongoDBConventionPacksForType> conventionPackFilters, string name, IConvention convention)
     {
         var pack = new ConventionPack { convention };
-        ConventionRegistry.Register(name, pack, type => ShouldInclude(name, pack, type));
+        ConventionRegistry.Register(name, pack, type => ShouldInclude(conventionPackFilters, name, pack, type));
     }
 
-    bool ShouldInclude(string conventionPackName, IConventionPack conventionPack, Type type)
+    static bool ShouldInclude(IEnumerable<ICanFilterMongoDBConventionPacksForType> conventionPackFilters, string conventionPackName, IConventionPack conventionPack, Type type)
     {
-        foreach (var filter in _conventionPackFilters)
+        foreach (var filter in conventionPackFilters)
         {
             if (!filter.ShouldInclude(conventionPackName, conventionPack, type))
             {

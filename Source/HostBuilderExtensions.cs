@@ -4,7 +4,6 @@
 using System.Text.Json;
 using Aksio.MongoDB;
 using Aksio.Serialization;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -27,8 +26,7 @@ public static class HostBuilderExtensions
     /// </remarks>
     public static IHostBuilder UseMongoDB(this IHostBuilder builder, IMongoDBArtifacts? mongoDBArtifacts = default, IDerivedTypes? derivedTypes = default, JsonSerializerOptions? jsonSerializerOptions = default)
     {
-        var defaults = new MongoDBDefaults(mongoDBArtifacts, derivedTypes, jsonSerializerOptions);
-        builder.ConfigureServices(_ => _.AddSingleton(defaults));
+        MongoDBDefaults.Initialize(mongoDBArtifacts, derivedTypes, jsonSerializerOptions);
         return builder;
     }
 }
