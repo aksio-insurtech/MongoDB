@@ -6,6 +6,7 @@ using Aksio.Execution;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Configuration;
 using MongoDB.Driver.Core.Events;
 
 namespace Aksio.MongoDB;
@@ -36,18 +37,25 @@ public class MongoDBClientFactory : IMongoDBClientFactory
 
     IMongoClient CreateImplementation(MongoClientSettings settings)
     {
-        settings.ClusterConfigurator = builder =>
-        {
-            if (_logger.IsEnabled(LogLevel.Trace))
-            {
-                builder
-                    .Subscribe<CommandStartedEvent>(command => _logger.CommandStarted(command.RequestId, command.CommandName, command.Command.ToJson()))
-                    .Subscribe<CommandFailedEvent>(command => _logger.CommandFailed(command.RequestId, command.CommandName, command.Failure.Message))
-                    .Subscribe<CommandSucceededEvent>(command => _logger.CommandSucceeded(command.RequestId, command.CommandName));
-            }
-        };
-
+        settings.ClusterConfigurator = ClusterConfigurator;
         _logger.CreateClient(settings.Server.ToString());
         return new MongoClient(settings);
     }
+
+    void ClusterConfigurator(ClusterBuilder builder)
+    {
+        if (_logger.IsEnabled(LogLevel.Trace))
+        {
+            builder
+                .Subscribe<CommandStartedEvent>(CommandStarted)
+                .Subscribe<CommandFailedEvent>(CommandFailed)
+                .Subscribe<CommandSucceededEvent>(CommandSucceeded);
+        }
+    }
+
+    void CommandStarted(CommandStartedEvent command) => _logger.CommandStarted(command.RequestId, command.CommandName, command.Command.ToJson());
+
+    void CommandFailed(CommandFailedEvent command) => _logger.CommandFailed(command.RequestId, command.CommandName, command.Failure.Message);
+
+    void CommandSucceeded(CommandSucceededEvent command) => _logger.CommandSucceeded(command.RequestId, command.CommandName);
 }
