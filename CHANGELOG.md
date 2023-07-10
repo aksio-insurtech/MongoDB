@@ -1,3 +1,10 @@
+# [v1.0.10] - 2023-7-10 [PR: #8](https://github.com/aksio-insurtech/MongoDB/pull/8)
+
+### Fixed
+
+- Removing memory leakage from logging by formalizing the `Action<>` as private methods and also not enable logging unless `Trace` log level is set.
+
+
 # [v1.0.9] - 2023-6-21 [PR: #7](https://github.com/aksio-insurtech/MongoDB/pull/7)
 
 ### Fixed
