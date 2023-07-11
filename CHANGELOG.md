@@ -1,3 +1,10 @@
+# [v1.0.11] - 2023-7-11 [PR: #9](https://github.com/aksio-insurtech/MongoDB/pull/9)
+
+### Fixed
+
+- When serializing types that has properties represented as object and the content is a `Guid`, by default it would throw an exception "GuidSerializer cannot serialize a Guid when GuidRepresentation is Unspecified.". This release adds an object serializer with the same Guid representation as other places.
+
+
 # [v1.0.10] - 2023-7-10 [PR: #8](https://github.com/aksio-insurtech/MongoDB/pull/8)
 
 ### Fixed
