@@ -64,6 +64,12 @@ public static class MongoDBDefaults
             BsonSerializer
                 .RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
+            // When you have types with properties defined as object but could hold a Guid, the GuidRepresentation gets by default set to Unspecified.
+            // By adding an object serializer for object configured explicitly with the Standard representation it should get serialized correctly and not throw an exception.
+            // As described here: https://jira.mongodb.org/browse/CSHARP-3780
+            BsonSerializer
+                .RegisterSerializer(new ObjectSerializer(BsonSerializer.LookupDiscriminatorConvention(typeof(object)), GuidRepresentation.Standard));
+
             foreach (var derivedType in derivedTypes.TypesWithDerivatives)
             {
                 BsonSerializer.RegisterDiscriminatorConvention(derivedType, new DerivedTypeDiscriminatorConvention(derivedTypes));
