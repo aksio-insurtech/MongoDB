@@ -1,3 +1,10 @@
+# [v1.0.14] - 2023-7-18 [PR: #12](https://github.com/aksio-insurtech/MongoDB/pull/12)
+
+### Fixed
+
+- Upgraded Fundamentals
+
+
 # [v1.0.13] - 2023-7-14 [PR: #11](https://github.com/aksio-insurtech/MongoDB/pull/11)
 
 ### Fixed
