@@ -1,3 +1,36 @@
+# [v1.0.15] - 2023-7-18 [PR: #13](https://github.com/aksio-insurtech/MongoDB/pull/13)
+
+## Summary
+
+Summary of the PR here. The GitHub release description is created from this comment so keep it nice and descriptive.
+Remember to remove sections that you don't need or use.
+If it does not make sense to have a summary, you can take that out as well.
+
+### Added
+
+- Describe the added features
+
+### Changed
+
+- Describe the outwards facing code change
+
+### Fixed
+
+- Describe the fix and the bug
+
+### Removed
+
+- Describe what was removed and why
+
+### Security
+
+- Describe the security issue and the fix
+
+### Deprecated
+
+- Describe the part of the code being deprecated and why
+
+
 # [v1.0.14] - 2023-7-18 [PR: #12](https://github.com/aksio-insurtech/MongoDB/pull/12)
 
 ### Fixed
