@@ -1,3 +1,10 @@
+# [v1.0.19] - 2023-9-22 [PR: #17](https://github.com/aksio-insurtech/MongoDB/pull/17)
+
+### Fixed
+
+- Fixed `ConceptAs` serializer for values of `ulong` (`UInt64`) types. Instead of calling `Converter.ChangeType()` which actually throws an exception if the value is outside the range of what is `MinValue` or `MaxValue` of a `long` (`Int64`), we now cast it using a regular cast from `ulong` to `long` and back to `ulong` when deserializing from Bson.
+
+
 # [v1.0.18] - 2023-7-18 [PR: #16](https://github.com/aksio-insurtech/MongoDB/pull/16)
 
 ### Fixed
