@@ -106,9 +106,9 @@ public class ConceptSerializer<T> : IBsonSerializer<T>
         }
         else if (underlyingValueType == typeof(long) || underlyingValueType == typeof(ulong))
         {
-            if (underlyingValue is ulong)
+            if (underlyingValue is ulong underlyingValueAsULong)
             {
-                underlyingValue = Convert.ChangeType(underlyingValue, typeof(long))!;
+                underlyingValue = (long)underlyingValueAsULong;
             }
 
             bsonWriter.WriteInt64((long)underlyingValue);
@@ -180,7 +180,7 @@ public class ConceptSerializer<T> : IBsonSerializer<T>
             var value = bsonReader.ReadInt64();
             if (valueType == typeof(ulong))
             {
-                return Convert.ChangeType(value, typeof(ulong))!;
+                return (ulong)value;
             }
             return value;
         }
