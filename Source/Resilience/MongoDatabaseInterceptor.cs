@@ -35,6 +35,7 @@ public class MongoDatabaseInterceptor : IInterceptor
         invocation.Proceed();
 
         invocation.ReturnValue = _proxyGenerator.CreateInterfaceProxyWithTarget(
+            invocation.Method.ReturnType,
             invocation.ReturnValue,
             new ProxyGenerationOptions
             {
