@@ -56,7 +56,7 @@ public class MongoDBClientFactory : IMongoDBClientFactory
         var proxyGenerator = new ProxyGenerator();
         var proxyGeneratorOptions = new ProxyGenerationOptions
         {
-            Selector = new MongoDatabaseInterceptorSelector(proxyGenerator, resiliencePipeline, client)
+            Selector = new MongoClientInterceptorSelector(proxyGenerator, resiliencePipeline, client)
         };
         return proxyGenerator.CreateInterfaceProxyWithTarget<IMongoClient>(client, proxyGeneratorOptions);
     }
