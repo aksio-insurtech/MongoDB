@@ -21,7 +21,7 @@ public class MongoDatabaseInterceptorSelector : IInterceptorSelector
     /// Initializes a new instance of the <see cref="MongoDatabaseInterceptorSelector"/> class.
     /// </summary>
     /// <param name="proxyGenerator"><see cref="ProxyGenerator"/> for creating further proxies.</param>
-    /// <param name="resiliencePipeline">The <see cref="ResiliencePipeline"/> to use.</param>/// 
+    /// <param name="resiliencePipeline">The <see cref="ResiliencePipeline"/> to use.</param>
     /// <param name="mongoClient"><see cref="IMongoClient"/> to intercept.</param>
     public MongoDatabaseInterceptorSelector(
         ProxyGenerator proxyGenerator,

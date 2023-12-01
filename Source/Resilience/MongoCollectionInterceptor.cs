@@ -10,7 +10,7 @@ namespace Aksio.MongoDB;
 /// <summary>
 /// Represents an interceptor for <see cref="IMongoCollection{TDocument}"/>.
 /// </summary>
-public class MongoCollectionInterceptor : IInterceptor
+public class MongoCollectionInterceptor : IInterceptor, IDisposable
 {
     readonly ResiliencePipeline _resiliencePipeline;
     readonly SemaphoreSlim _openConnectionSemaphore;
@@ -25,6 +25,9 @@ public class MongoCollectionInterceptor : IInterceptor
         _resiliencePipeline = resiliencePipeline;
         _openConnectionSemaphore = new SemaphoreSlim(mongoClient.Settings.MaxConnectionPoolSize / 2, mongoClient.Settings.MaxConnectionPoolSize / 2);
     }
+
+    /// <inheritdoc/>
+    public void Dispose() => _openConnectionSemaphore.Dispose();
 
     /// <inheritdoc/>
     public void Intercept(IInvocation invocation)
