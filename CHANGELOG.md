@@ -1,3 +1,11 @@
+# [v1.1.0] - 2023-12-1 [PR: #18](https://github.com/aksio-insurtech/MongoDB/pull/18)
+
+### Added
+
+- Added a cross cutting approach to resilience by leveraging dynamic proxies that wraps write calls to Mongo collections with a retry mechanism for failures. In addition it also takes into consideration the connection pool and limits the number of actions performed based on available connections in the pool. The retry policy will run 5 attempts with 200ms delay between each attempt.
+
+
+
 # [v1.0.19] - 2023-9-22 [PR: #17](https://github.com/aksio-insurtech/MongoDB/pull/17)
 
 ### Fixed
