@@ -36,6 +36,9 @@ public class MongoDatabaseInterceptor : IInterceptor
 
         invocation.ReturnValue = _proxyGenerator.CreateInterfaceProxyWithTarget(
             invocation.ReturnValue as IMongoDatabase,
-            new MongoCollectionInterceptor(_resiliencePipeline, _mongoClient));
+            new ProxyGenerationOptions
+            {
+                Selector = new MongoCollectionInterceptorSelector(_resiliencePipeline, _mongoClient)
+            });
     }
 }

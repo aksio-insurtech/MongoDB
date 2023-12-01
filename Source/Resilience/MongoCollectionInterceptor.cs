@@ -34,20 +34,13 @@ public class MongoCollectionInterceptor : IInterceptor, IDisposable
     {
         try
         {
-            if (invocation.Method.ReturnType != typeof(Task))
+            invocation.ReturnValue = _resiliencePipeline.ExecuteAsync(async (_) =>
             {
-                invocation.Proceed();
-            }
-            else
-            {
-                invocation.ReturnValue = _resiliencePipeline.ExecuteAsync(async (_) =>
-                {
-                    await _openConnectionSemaphore.WaitAsync();
-                    var task = invocation.Method.Invoke(invocation.InvocationTarget, invocation.Arguments) as Task;
-                    await task!;
-                    _openConnectionSemaphore.Release(1);
-                }).AsTask();
-            }
+                await _openConnectionSemaphore.WaitAsync();
+                var task = invocation.Method.Invoke(invocation.InvocationTarget, invocation.Arguments) as Task;
+                await task!;
+                _openConnectionSemaphore.Release(1);
+            }).AsTask();
         }
         catch (Exception)
         {

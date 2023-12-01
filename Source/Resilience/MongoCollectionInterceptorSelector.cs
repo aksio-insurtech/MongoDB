@@ -9,26 +9,22 @@ using Polly;
 namespace Aksio.MongoDB;
 
 /// <summary>
-/// Represents a selector for <see cref="MongoDatabaseInterceptor"/>.
+/// Represents a selector for <see cref="MongoCollectionInterceptor"/>.
 /// </summary>
-public class MongoDatabaseInterceptorSelector : IInterceptorSelector
+public class MongoCollectionInterceptorSelector : IInterceptorSelector
 {
-    readonly ProxyGenerator _proxyGenerator;
     readonly ResiliencePipeline _resiliencePipeline;
     readonly IMongoClient _mongoClient;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MongoDatabaseInterceptorSelector"/> class.
+    /// Initializes a new instance of the <see cref="MongoCollectionInterceptorSelector"/> class.
     /// </summary>
-    /// <param name="proxyGenerator"><see cref="ProxyGenerator"/> for creating further proxies.</param>
     /// <param name="resiliencePipeline">The <see cref="ResiliencePipeline"/> to use.</param>
     /// <param name="mongoClient"><see cref="IMongoClient"/> to intercept.</param>
-    public MongoDatabaseInterceptorSelector(
-        ProxyGenerator proxyGenerator,
+    public MongoCollectionInterceptorSelector(
         ResiliencePipeline resiliencePipeline,
         IMongoClient mongoClient)
     {
-        _proxyGenerator = proxyGenerator;
         _resiliencePipeline = resiliencePipeline;
         _mongoClient = mongoClient;
     }
@@ -36,9 +32,9 @@ public class MongoDatabaseInterceptorSelector : IInterceptorSelector
     /// <inheritdoc/>
     public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
     {
-        if (method.Name == nameof(IMongoDatabase.GetCollection))
+        if (method.ReturnType == typeof(Task))
         {
-            return new[] { new MongoDatabaseInterceptor(_proxyGenerator, _resiliencePipeline, _mongoClient) };
+            return new[] { new MongoCollectionInterceptor(_resiliencePipeline, _mongoClient) };
         }
         return Array.Empty<IInterceptor>();
     }
