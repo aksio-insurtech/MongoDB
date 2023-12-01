@@ -47,7 +47,7 @@ public class MongoDBClientFactory : IMongoDBClientFactory
         var resiliencePipeline = new ResiliencePipelineBuilder()
             .AddRetry(new RetryStrategyOptions
             {
-                ShouldHandle = new PredicateBuilder().Handle<MongoWaitQueueFullException>(),
+                ShouldHandle = new PredicateBuilder().Handle<Exception>(),
                 UseJitter = true,
                 MaxRetryAttempts = 5,
                 Delay = TimeSpan.FromMilliseconds(1000)
