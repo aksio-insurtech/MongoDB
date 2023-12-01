@@ -3,11 +3,14 @@
 
 using System.Collections.Concurrent;
 using Aksio.Execution;
+using Castle.DynamicProxy;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
 using MongoDB.Driver.Core.Events;
+using Polly;
+using Polly.Retry;
 
 namespace Aksio.MongoDB;
 
@@ -39,7 +42,23 @@ public class MongoDBClientFactory : IMongoDBClientFactory
     {
         settings.ClusterConfigurator = ClusterConfigurator;
         _logger.CreateClient(settings.Server.ToString());
-        return new MongoClient(settings);
+        var client = new MongoClient(settings);
+
+        var resiliencePipeline = new ResiliencePipelineBuilder()
+            .AddRetry(new RetryStrategyOptions
+            {
+                ShouldHandle = new PredicateBuilder().Handle<Exception>(),
+                UseJitter = true,
+                MaxRetryAttempts = 5,
+                Delay = TimeSpan.FromMilliseconds(200)
+            }).Build();
+
+        var proxyGenerator = new ProxyGenerator();
+        var proxyGeneratorOptions = new ProxyGenerationOptions
+        {
+            Selector = new MongoClientInterceptorSelector(proxyGenerator, resiliencePipeline, client)
+        };
+        return proxyGenerator.CreateInterfaceProxyWithTarget<IMongoClient>(client, proxyGeneratorOptions);
     }
 
     void ClusterConfigurator(ClusterBuilder builder)

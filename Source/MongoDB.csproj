@@ -22,11 +22,13 @@
 
     <ItemGroup>
         <PackageReference Include="Aksio.Defaults" PrivateAssets="All" Condition="'$(PublishReadyToRun)' != 'true'" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
+        <PackageReference Include="castle.core" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+        <PackageReference Include="polly.core" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="$(MSBuildThisFileDirectory)../README.md" Pack="true" PackagePath="/"/>
+        <None Include="$(MSBuildThisFileDirectory)../README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 
     <ItemGroup>

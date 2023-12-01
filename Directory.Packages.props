@@ -8,6 +8,8 @@
 		<PackageVersion Include="Aksio.Fundamentals" Version="1.3.10" />
         <PackageVersion Include="MongoDB.Driver" Version="2.17.1" />
         <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+        <PackageVersion Include="castle.core" Version="5.1.1" />
+        <PackageVersion Include="polly.core" Version="8.2.0" />
 
         <!-- Specifications -->
 		<PackageVersion Include="Aksio.Specifications" Version="2.0.1" />
