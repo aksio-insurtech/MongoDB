@@ -36,7 +36,7 @@ public class MongoCollectionInterceptor : IInterceptor, IDisposable
         {
             invocation.ReturnValue = _resiliencePipeline.ExecuteAsync(async (_) =>
             {
-                await _openConnectionSemaphore.WaitAsync();
+                await _openConnectionSemaphore.WaitAsync(1000);
                 var task = invocation.Method.Invoke(invocation.InvocationTarget, invocation.Arguments) as Task;
                 await task!;
                 _openConnectionSemaphore.Release(1);
