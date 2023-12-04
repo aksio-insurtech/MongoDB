@@ -32,19 +32,11 @@ public class MongoCollectionInterceptor : IInterceptor, IDisposable
     /// <inheritdoc/>
     public void Intercept(IInvocation invocation)
     {
-        try
+        invocation.ReturnValue = _resiliencePipeline.ExecuteAsync(async (_) =>
         {
-            invocation.ReturnValue = _resiliencePipeline.ExecuteAsync(async (_) =>
-            {
-                await _openConnectionSemaphore.WaitAsync(1000);
-                var task = invocation.Method.Invoke(invocation.InvocationTarget, invocation.Arguments) as Task;
-                await task!;
-                _openConnectionSemaphore.Release(1);
-            }).AsTask();
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+            await _openConnectionSemaphore.WaitAsync(1000);
+            await (invocation.Method.Invoke(invocation.InvocationTarget, invocation.Arguments) as Task)!;
+            _openConnectionSemaphore.Release(1);
+        }).AsTask();
     }
 }
