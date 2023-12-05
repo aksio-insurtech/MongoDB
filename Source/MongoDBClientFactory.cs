@@ -50,7 +50,7 @@ public class MongoDBClientFactory : IMongoDBClientFactory
                 ShouldHandle = new PredicateBuilder().Handle<Exception>(),
                 UseJitter = true,
                 MaxRetryAttempts = 5,
-                Delay = TimeSpan.FromMilliseconds(200)
+                Delay = TimeSpan.FromMilliseconds(500)
             }).Build();
 
         var proxyGenerator = new ProxyGenerator();
