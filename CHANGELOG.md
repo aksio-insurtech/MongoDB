@@ -1,3 +1,7 @@
+# [v1.1.1] - 2023-12-5 [PR: #0]()
+
+No release notes
+
 # [v1.1.0] - 2023-12-1 [PR: #18](https://github.com/aksio-insurtech/MongoDB/pull/18)
 
 ### Added
