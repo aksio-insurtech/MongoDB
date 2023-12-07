@@ -1,3 +1,10 @@
+# [v1.1.2] - 2023-12-7 [PR: #20](https://github.com/aksio-insurtech/MongoDB/pull/20)
+
+### Fixed
+
+- Upgraded to the latest MongoDB driver
+
+
 # [v1.1.1] - 2023-12-5 [PR: #0]()
 
 No release notes
