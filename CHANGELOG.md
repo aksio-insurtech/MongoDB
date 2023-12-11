@@ -1,10 +1,6 @@
 # [v1.2.2] - 2023-12-11 [PR: #0]()
 
-No release notes
-
-# [v1.2.1] - 2023-12-11 [PR: #0]()
-
-No release notes
+Forcing a build. We had the `Samples` project build packages, which lead to build errors since we tried publishing it. 
 
 # [v1.2.1] - 2023-12-11 [PR: #22](https://github.com/aksio-insurtech/MongoDB/pull/22)
 
@@ -14,8 +10,6 @@ This version is a breaking change from the previous. Due to minutes between rele
 ### Fixed
 
 - Switched from `AssemblyQualifiedName` to `FullName`.
-
-
 
 # [v1.2.0] - 2023-12-11 [PR: #21](https://github.com/aksio-insurtech/MongoDB/pull/21)
 
