@@ -1,3 +1,22 @@
+# [v1.2.2] - 2023-12-11 [PR: #0]()
+
+No release notes
+
+# [v1.2.1] - 2023-12-11 [PR: #0]()
+
+No release notes
+
+# [v1.2.1] - 2023-12-11 [PR: #22](https://github.com/aksio-insurtech/MongoDB/pull/22)
+
+** IMPORTANT **
+This version is a breaking change from the previous. Due to minutes between release, we're going for "its probably fine" :) 
+
+### Fixed
+
+- Switched from `AssemblyQualifiedName` to `FullName`.
+
+
+
 # [v1.2.0] - 2023-12-11 [PR: #21](https://github.com/aksio-insurtech/MongoDB/pull/21)
 
 ### Added
