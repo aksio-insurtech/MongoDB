@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDB", "Source\MongoDB.c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDB.Specs", "Specifications\MongoDB.csproj", "{F9309A45-62CE-4535-AECC-3CF79CBB2F40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "Samples\Samples.csproj", "{25DF84A1-16BF-43CF-947B-11D407FC28D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{F9309A45-62CE-4535-AECC-3CF79CBB2F40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9309A45-62CE-4535-AECC-3CF79CBB2F40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9309A45-62CE-4535-AECC-3CF79CBB2F40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25DF84A1-16BF-43CF-947B-11D407FC28D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25DF84A1-16BF-43CF-947B-11D407FC28D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25DF84A1-16BF-43CF-947B-11D407FC28D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25DF84A1-16BF-43CF-947B-11D407FC28D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
