@@ -17,4 +17,9 @@ public static class ConventionPacks
     /// Gets the ignore extra elements convention pack name.
     /// </summary>
     public const string IgnoreExtraElements = "Ignore extra elements convention";
+
+    /// <summary>
+    /// Gets the custom object discriminator convention pack name.
+    /// </summary>
+    public const string CustomObjectDiscriminator = "Custom object discriminator convention";
 }
