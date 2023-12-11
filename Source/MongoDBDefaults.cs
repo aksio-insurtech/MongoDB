@@ -53,6 +53,8 @@ public static class MongoDBDefaults
                 .RegisterSerializer(new DateOnlySerializer());
             BsonSerializer
                 .RegisterSerializer(new TimeOnlySerializer());
+            BsonSerializer
+                .RegisterSerializer(new TypeSerializer());
 
 #pragma warning disable CS0618
 

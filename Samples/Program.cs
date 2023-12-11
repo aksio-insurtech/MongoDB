@@ -25,13 +25,13 @@ var db = client.GetDatabase("test");
 db.DropCollection("blahs");
 var collection = db.GetCollection<Blah>();
 
-var b = new Blah("Hello", 42, new Bar("aasd"));
+var b = new Blah("Hello", 42, new Bar("aasd", typeof(string)));
 var doc = b.ToBsonDocument();
 
 // collection.InsertOne(new Blah("Hello", 42, "Something"));
-collection.InsertOne(new Blah("Hello", 42, new Bar("aasd")));
+collection.InsertOne(new Blah("Hello", 42, new Bar("aasd", typeof(string))));
 collection.InsertOne(new Blah("Hello", 42, new Foo("Cat", "Horse", "Bar")));
-collection.InsertOne(new Blah("Hello", 42, new Foo("Cat", "Horse", new Bar("Something"))));
+collection.InsertOne(new Blah("Hello", 42, new Foo("Cat", "Horse", new Bar("Something", typeof(string)))));
 
 
 // var items = collection.Find(_ => true).ToList();
