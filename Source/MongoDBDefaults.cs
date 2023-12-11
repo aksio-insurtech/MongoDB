@@ -68,7 +68,7 @@ public static class MongoDBDefaults
             // By adding an object serializer for object configured explicitly with the Standard representation it should get serialized correctly and not throw an exception.
             // As described here: https://jira.mongodb.org/browse/CSHARP-3780
             BsonSerializer
-                .RegisterSerializer(new ObjectSerializer(BsonSerializer.LookupDiscriminatorConvention(typeof(object)), GuidRepresentation.Standard));
+                .RegisterSerializer(new ObjectSerializer(CustomObjectDiscriminatorConvention.Instance, GuidRepresentation.Standard, t => true));
 
             foreach (var derivedType in derivedTypes.TypesWithDerivatives)
             {
@@ -79,6 +79,7 @@ public static class MongoDBDefaults
 
             RegisterConventionAsPack(conventionPackFilters, ConventionPacks.CamelCase, new CamelCaseElementNameConvention());
             RegisterConventionAsPack(conventionPackFilters, ConventionPacks.IgnoreExtraElements, new IgnoreExtraElementsConvention(true));
+            RegisterConventionAsPack(conventionPackFilters, ConventionPacks.CustomObjectDiscriminator, new CustomDiscriminatorConvention(CustomObjectDiscriminatorConvention.Instance, derivedTypes.TypesWithDerivatives));
 
             RegisterClassMaps(mongoDBArtifacts);
         }
