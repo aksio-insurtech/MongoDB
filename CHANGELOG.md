@@ -1,3 +1,11 @@
+# [v1.3.0] - 2023-12-11 [PR: #24](https://github.com/aksio-insurtech/MongoDB/pull/24)
+
+### Added
+
+- Added a serializer for `Type`.
+
+
+
 # [v1.2.3] - 2023-12-11 [PR: #23](https://github.com/aksio-insurtech/MongoDB/pull/23)
 
 ### Fixed
