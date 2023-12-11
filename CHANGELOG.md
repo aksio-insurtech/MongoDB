@@ -1,3 +1,10 @@
+# [v1.2.3] - 2023-12-11 [PR: #23](https://github.com/aksio-insurtech/MongoDB/pull/23)
+
+### Fixed
+
+- Adding the short assembly name to the discriminators for types, the format is then `{Type.Fullname}, {Assembly.Name}`. We don't want version info, just enough to get back to types.
+
+
 # [v1.2.2] - 2023-12-11 [PR: #0]()
 
 Forcing a build. We had the `Samples` project build packages, which lead to build errors since we tried publishing it. 
