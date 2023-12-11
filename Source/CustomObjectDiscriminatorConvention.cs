@@ -51,6 +51,6 @@ public class CustomObjectDiscriminatorConvention : IDiscriminatorConvention
     /// <inheritdoc/>
     public BsonValue GetDiscriminator(Type nominalType, Type actualType)
     {
-        return actualType.AssemblyQualifiedName;
+        return actualType.FullName;
     }
 }
