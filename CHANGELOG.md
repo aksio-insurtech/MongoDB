@@ -1,3 +1,10 @@
+# [v1.4.1] - 2023-12-11 [PR: #26](https://github.com/aksio-insurtech/MongoDB/pull/26)
+
+### Fixed
+
+- Upgrading `Aksio.Fundamentals` to the latest version.
+
+
 # [v1.4.0] - 2023-12-11 [PR: #25](https://github.com/aksio-insurtech/MongoDB/pull/25)
 
 ### Added
