@@ -1,3 +1,14 @@
+# [v1.2.0] - 2023-12-11 [PR: #21](https://github.com/aksio-insurtech/MongoDB/pull/21)
+
+### Added
+
+- Added a custom discriminator convention and a class map convention that overrides all types and sets the default discriminator to the `AssemblyQualifiedName`, allowing it to actually find the correct type when deserializing, which was not the case at all for our things.
+
+### Fixed
+
+- Allowing all types to be serialized with a discriminator, fixing a behavioral breaking change in the MongoDB driver.
+
+
 # [v1.1.2] - 2023-12-7 [PR: #20](https://github.com/aksio-insurtech/MongoDB/pull/20)
 
 ### Fixed
