@@ -19,11 +19,11 @@ public class TypeSerializer : SerializerBase<Type>
         switch (bsonType)
         {
             case BsonType.String:
-                return Type.GetType(context.Reader.ReadString()) ?? throw new InvalidOperationException("Could not deserialize type.");
-
-            default:
-                throw new NotSupportedException($"Cannot deserialize a {bsonType} to a {nameof(Type)}.");
+                var type = context.Reader.ReadString();
+                return Type.GetType(type) ?? throw new UnknownType(type);
         }
+
+        throw new UnknownType(bsonType.ToString());
     }
 
     /// <inheritdoc/>
