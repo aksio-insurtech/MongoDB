@@ -1,3 +1,7 @@
+# [v1.2.2] - 2023-12-11 [PR: #0]()
+
+No release notes
+
 # [v1.2.1] - 2023-12-11 [PR: #0]()
 
 No release notes
