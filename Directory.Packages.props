@@ -1,21 +1,20 @@
 <Project>
-	<PropertyGroup>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageVersion Include="Aksio.Defaults" Version="1.6.10" />
-		<PackageVersion Include="Aksio.Defaults.Specs" Version="1.6.10" />
-		<PackageVersion Include="Aksio.Fundamentals" Version="1.6.0" />
-        <PackageVersion Include="MongoDB.Driver" Version="2.22.0" />
-        <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-        <PackageVersion Include="castle.core" Version="5.1.1" />
-        <PackageVersion Include="polly.core" Version="8.2.0" />
-
-        <!-- Specifications -->
-		<PackageVersion Include="Aksio.Specifications" Version="2.0.1" />
-		<PackageVersion Include="xunit" Version="2.4.2" />
-		<PackageVersion Include="xunit.runner.visualstudio" Version="2.4.2" />
-		<PackageVersion Include="moq" Version="4.18.4" />
-		<PackageVersion Include="Microsoft.NET.Test.SDK" Version="16.10.0" />
-	</ItemGroup>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Aksio.Defaults" Version="1.6.10" />
+    <PackageVersion Include="Aksio.Defaults.Specs" Version="1.6.10" />
+    <PackageVersion Include="Aksio.Fundamentals" Version="1.6.1" />
+    <PackageVersion Include="MongoDB.Driver" Version="2.22.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+    <PackageVersion Include="castle.core" Version="5.1.1" />
+    <PackageVersion Include="polly.core" Version="8.2.0" />
+    <!-- Specifications -->
+    <PackageVersion Include="Aksio.Specifications" Version="2.0.1" />
+    <PackageVersion Include="xunit" Version="2.4.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.2" />
+    <PackageVersion Include="moq" Version="4.18.4" />
+    <PackageVersion Include="Microsoft.NET.Test.SDK" Version="16.10.0" />
+  </ItemGroup>
 </Project>
