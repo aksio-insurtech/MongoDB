@@ -1,3 +1,13 @@
+# [v1.4.2] - 2023-12-15 [PR: #27](https://github.com/aksio-insurtech/MongoDB/pull/27)
+
+## Summary
+
+Create an ElementNameConvention that uses the ToCamelCase method from fundamentals and set this in the MongoDBDefaults.
+
+We need consistency of json name handling across Mongo, System.Text.Json, etc.
+
+
+
 # [v1.4.1] - 2023-12-11 [PR: #26](https://github.com/aksio-insurtech/MongoDB/pull/26)
 
 ### Fixed
