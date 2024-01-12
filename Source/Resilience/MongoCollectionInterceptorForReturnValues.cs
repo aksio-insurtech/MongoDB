@@ -20,11 +20,9 @@ public class MongoCollectionInterceptorForReturnValues : IInterceptor
     /// Initializes a new instance of the <see cref="MongoCollectionInterceptorForReturnValues"/> class.
     /// </summary>
     /// <param name="resiliencePipeline">The <see cref="ResiliencePipeline"/> to use.</param>
-    /// <param name="mongoClient"><see cref="IMongoClient"/> the interceptor is for.</param>
     /// <param name="openConnectionSemaphore">The <see cref="SemaphoreSlim"/> for keeping track of open connections.</param>
     public MongoCollectionInterceptorForReturnValues(
         ResiliencePipeline resiliencePipeline,
-        IMongoClient mongoClient,
         SemaphoreSlim openConnectionSemaphore)
     {
         _resiliencePipeline = resiliencePipeline;
@@ -59,6 +57,7 @@ public class MongoCollectionInterceptorForReturnValues : IInterceptor
                 var result = (invocation.Method.Invoke(invocation.InvocationTarget, invocation.Arguments) as Task)!;
 #pragma warning disable CA1849 // Synchronous block in a Task returning method
 #pragma warning disable CA2008 // Do not create tasks without passing a TaskScheduler
+#pragma warning disable MA0042 // Use await instead of GetResult()
                 result.ContinueWith(_ =>
                 {
                     _openConnectionSemaphore.Release(1);
@@ -76,6 +75,7 @@ public class MongoCollectionInterceptorForReturnValues : IInterceptor
                         setResultMethod.Invoke(tcs, new[] { taskResult });
                     }
                 }).GetAwaiter().GetResult();
+#pragma warning restore MA0042 // Use await instead of GetResult()
 #pragma warning restore CA2008 // Do not create tasks without passing a TaskScheduler
 #pragma warning restore CA1849 // Synchronous block in a Task returning method
             }

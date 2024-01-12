@@ -7,7 +7,6 @@ using MongoDB.Driver;
 
 namespace Aksio.MongoDB.Resilience.for_MongoCollectionInterceptorSelector.when_selecting_interceptors;
 
-
 public class for_async_methods : given.an_interceptor_selector
 {
     protected IEnumerable<MethodInfo> async_methods;
