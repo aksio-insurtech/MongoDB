@@ -32,7 +32,7 @@ public class MongoCollectionInterceptorSelector : IInterceptorSelector
     /// <inheritdoc/>
     public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
     {
-        if (method.ReturnType == typeof(Task))
+        if (method.ReturnType.IsAssignableTo(typeof(Task)))
         {
             return new[] { new MongoCollectionInterceptor(_resiliencePipeline, _mongoClient) };
         }
