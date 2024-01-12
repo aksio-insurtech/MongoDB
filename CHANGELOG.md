@@ -1,3 +1,10 @@
+# [v1.4.3] - 2024-1-12 [PR: #29](https://github.com/aksio-insurtech/MongoDB/pull/29)
+
+### Fixed
+
+- FIxing the `MongoCollectionInterceptorSelector` to include all methods returning a type that is assignable to `Task` not just the ones being a `Task`, which was pretty much only the `InsertOne*()` methods.
+
+
 # [v1.4.2] - 2023-12-15 [PR: #27](https://github.com/aksio-insurtech/MongoDB/pull/27)
 
 ## Summary
