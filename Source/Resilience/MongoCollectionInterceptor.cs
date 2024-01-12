@@ -19,11 +19,9 @@ public class MongoCollectionInterceptor : IInterceptor
     /// Initializes a new instance of the <see cref="MongoCollectionInterceptorForReturnValues"/> class.
     /// </summary>
     /// <param name="resiliencePipeline">The <see cref="ResiliencePipeline"/> to use.</param>
-    /// <param name="mongoClient"><see cref="IMongoClient"/> the interceptor is for.</param>
     /// <param name="openConnectionSemaphore">The <see cref="SemaphoreSlim"/> for keeping track of open connections.</param>
     public MongoCollectionInterceptor(
         ResiliencePipeline resiliencePipeline,
-        IMongoClient mongoClient,
         SemaphoreSlim openConnectionSemaphore)
     {
         _resiliencePipeline = resiliencePipeline;

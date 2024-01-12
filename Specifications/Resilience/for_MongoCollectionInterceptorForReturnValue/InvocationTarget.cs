@@ -9,10 +9,9 @@ public class InvocationTarget
 
     public Task SuccessfulMethod() => Task.CompletedTask;
     public Task CancelledMethod() => Task.FromCanceled(new CancellationToken(true));
-    public Task FaultedMethod() => Task.Run(() =>
-    {
-        throw new(ErrorMessage);
-    });
+
+#pragma warning disable AS0008, CA2201
+    public Task FaultedMethod() => Task.Run(() => throw new(ErrorMessage));
 
     public Task<string> FaultedMethodWithoutTask() => throw new(ErrorMessage);
 }

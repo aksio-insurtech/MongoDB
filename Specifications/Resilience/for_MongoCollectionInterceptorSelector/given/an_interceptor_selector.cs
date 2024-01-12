@@ -14,7 +14,6 @@ public class an_interceptor_selector : Specification
     protected Mock<IMongoClient> mongo_client;
     protected MongoClientSettings settings;
 
-
     void Establish()
     {
         resilience_pipeline = new ResiliencePipelineBuilder().Build();

@@ -12,8 +12,7 @@ public class faulted_method_without_task : given.an_interceptor
     void Because()
     {
         interceptor.Intercept(invocation.Object);
-        var exceptions = (AggregateException)return_value.Exception;
-        exception = exceptions.InnerExceptions.Single().InnerException;
+        exception = return_value.Exception.InnerExceptions.Single().InnerException;
     }
 
     [Fact] void should_be_faulted() => return_value.IsFaulted.ShouldBeTrue();

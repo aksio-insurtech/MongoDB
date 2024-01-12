@@ -11,7 +11,6 @@ public abstract class an_interceptor : Specification
 {
     protected const int pool_size = 10;
     protected ResiliencePipeline resilience_pipeline;
-    protected Mock<IMongoClient> mongo_client;
     protected MongoClientSettings settings;
     protected MongoCollectionInterceptor interceptor;
     protected Mock<Castle.DynamicProxy.IInvocation> invocation;
@@ -21,17 +20,13 @@ public abstract class an_interceptor : Specification
 
     protected abstract string GetInvocationTargetMethod();
 
-
     void Establish()
     {
         resilience_pipeline = new ResiliencePipelineBuilder().Build();
-        mongo_client = new();
-        settings = new MongoClientSettings();
-        mongo_client.SetupGet(_ => _.Settings).Returns(settings);
 
         semaphore = new SemaphoreSlim(pool_size, pool_size);
 
-        interceptor = new(resilience_pipeline, mongo_client.Object, semaphore);
+        interceptor = new(resilience_pipeline, semaphore);
 
         invocation = new();
         invocation.SetupGet(_ => _.Method).Returns(typeof(InvocationTarget).GetMethod(GetInvocationTargetMethod())!);

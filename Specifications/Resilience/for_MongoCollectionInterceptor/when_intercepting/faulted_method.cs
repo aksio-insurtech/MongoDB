@@ -7,7 +7,6 @@ namespace Aksio.MongoDB.Resilience.for_MongoCollectionInterceptor.when_intercept
 
 public class faulted_method : given.an_interceptor
 {
-
     Exception exception;
 
     protected override string GetInvocationTargetMethod() => nameof(InvocationTarget.FaultedMethod);
