@@ -9,7 +9,7 @@ using Polly;
 namespace Aksio.MongoDB;
 
 /// <summary>
-/// Represents a selector for <see cref="MongoCollectionInterceptor"/>.
+/// Represents a selector for <see cref="MongoCollectionInterceptorForReturnValues"/>.
 /// </summary>
 public class MongoCollectionInterceptorSelector : IInterceptorSelector
 {
@@ -32,9 +32,17 @@ public class MongoCollectionInterceptorSelector : IInterceptorSelector
     /// <inheritdoc/>
     public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
     {
+#pragma warning disable CA2000 // Dispose objects before losing scope.
+        var semaphore = new SemaphoreSlim(_mongoClient.Settings.MaxConnectionPoolSize / 2, _mongoClient.Settings.MaxConnectionPoolSize / 2);
+#pragma warning restore CA2000 // Dispose objects before losing scope.
         if (method.ReturnType.IsAssignableTo(typeof(Task)))
         {
-            return new[] { new MongoCollectionInterceptor(_resiliencePipeline, _mongoClient) };
+            if (method.ReturnType.IsGenericType)
+            {
+                return new[] { new MongoCollectionInterceptorForReturnValues(_resiliencePipeline, _mongoClient, semaphore) };
+            }
+
+            return new[] { new MongoCollectionInterceptor(_resiliencePipeline, _mongoClient, semaphore) };
         }
         return Array.Empty<IInterceptor>();
     }
