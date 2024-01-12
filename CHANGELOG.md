@@ -1,3 +1,10 @@
+# [v1.4.5] - 2024-1-12 [PR: #31](https://github.com/aksio-insurtech/MongoDB/pull/31)
+
+### Fixed
+
+- Fixing the collection interceptor to return correct type of task and fulfill the task correctly. Added tests to verify the desired behavior.
+
+
 # [v1.4.4] - 2024-1-12 [PR: #30](https://github.com/aksio-insurtech/MongoDB/pull/30)
 
 ### Fixed
