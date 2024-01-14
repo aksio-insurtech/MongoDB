@@ -1,3 +1,10 @@
+# [v1.4.6] - 2024-1-14 [PR: #32](https://github.com/aksio-insurtech/MongoDB/pull/32)
+
+### Fixed
+
+- Fixing collection interceptors to guarantee correct synchronization context by using `async`/`await` internally to them.
+
+
 # [v1.4.5] - 2024-1-12 [PR: #31](https://github.com/aksio-insurtech/MongoDB/pull/31)
 
 ### Fixed
