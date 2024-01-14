@@ -39,7 +39,7 @@ public class MongoCollectionInterceptorForReturnValues : IInterceptor
 
         var returnType = invocation.Method.ReturnType.GetGenericArguments()[0];
         var taskType = typeof(TaskCompletionSource<>).MakeGenericType(returnType);
-        var tcs = Activator.CreateInstance(taskType)!;
+        var tcs = Activator.CreateInstance(taskType, new[] { TaskCreationOptions.RunContinuationsAsynchronously })!;
         var tcsType = tcs.GetType();
         setResultMethod = tcsType.GetMethod(nameof(TaskCompletionSource<object>.SetResult))!;
         setExceptionMethod = tcsType.GetMethod(nameof(TaskCompletionSource<object>.SetException), new Type[] { typeof(Exception) })!;
@@ -55,35 +55,30 @@ public class MongoCollectionInterceptorForReturnValues : IInterceptor
             try
             {
                 var result = (invocation.Method.Invoke(invocation.InvocationTarget, invocation.Arguments) as Task)!;
-#pragma warning disable CA1849 // Synchronous block in a Task returning method
-#pragma warning disable CA2008 // Do not create tasks without passing a TaskScheduler
-#pragma warning disable MA0042 // Use await instead of GetResult()
-                result.ContinueWith(_ =>
+                await result.ConfigureAwait(false);
+
+                _openConnectionSemaphore.Release(1);
+                if (result.IsCanceled)
                 {
-                    _openConnectionSemaphore.Release(1);
-                    if (_.IsFaulted && _.Exception is not null)
-                    {
-                        setExceptionMethod.Invoke(tcs, new[] { _.Exception });
-                    }
-                    else if (_.IsCanceled)
-                    {
-                        setCanceledMethod.Invoke(tcs, Array.Empty<object>());
-                    }
-                    else if (_.IsCompletedSuccessfully)
-                    {
-                        var taskResult = result.GetType().GetProperty(nameof(Task<object>.Result))!.GetValue(result);
-                        setResultMethod.Invoke(tcs, new[] { taskResult });
-                    }
-                }).GetAwaiter().GetResult();
-#pragma warning restore MA0042 // Use await instead of GetResult()
-#pragma warning restore CA2008 // Do not create tasks without passing a TaskScheduler
-#pragma warning restore CA1849 // Synchronous block in a Task returning method
+                    setCanceledMethod.Invoke(tcs, Array.Empty<object>());
+                }
+                else
+                {
+#pragma warning disable CA1849 // Synchronous blocks
+                    var taskResult = result.GetType().GetProperty(nameof(Task<object>.Result))!.GetValue(result);
+                    setResultMethod.Invoke(tcs, new[] { taskResult });
+#pragma warning restore CA1849 // Synchronous blocks
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                _openConnectionSemaphore.Release(1);
+                setCanceledMethod.Invoke(tcs, Array.Empty<object>());
             }
             catch (Exception ex)
             {
                 _openConnectionSemaphore.Release(1);
                 setExceptionMethod.Invoke(tcs, new[] { ex });
-                return ValueTask.FromException(ex);
             }
 
             return ValueTask.CompletedTask;

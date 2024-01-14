@@ -31,7 +31,7 @@ public class MongoCollectionInterceptor : IInterceptor
     /// <inheritdoc/>
     public void Intercept(IInvocation invocation)
     {
-        var tcs = new TaskCompletionSource();
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
         invocation.ReturnValue = tcs.Task;
 
@@ -42,28 +42,22 @@ public class MongoCollectionInterceptor : IInterceptor
             try
             {
                 var result = (invocation.Method.Invoke(invocation.InvocationTarget, invocation.Arguments) as Task)!;
-#pragma warning disable CA1849 // Synchronous block in a Task returning method
-#pragma warning disable CA2008 // Do not create tasks without passing a TaskScheduler
-#pragma warning disable MA0042 // Use await instead of GetResult()
-                result.ContinueWith(_ =>
+                await result.ConfigureAwait(false);
+
+                _openConnectionSemaphore.Release(1);
+                if (result.IsCanceled)
                 {
-                    _openConnectionSemaphore.Release(1);
-                    if (_.IsFaulted && _.Exception is not null)
-                    {
-                        tcs.SetException(_.Exception);
-                    }
-                    else if (_.IsCanceled)
-                    {
-                        tcs.SetCanceled();
-                    }
-                    else if (_.IsCompletedSuccessfully)
-                    {
-                        tcs.SetResult();
-                    }
-                }).GetAwaiter().GetResult();
-#pragma warning restore MA0042 // Use await instead of GetResult()
-#pragma warning restore CA2008 // Do not create tasks without passing a TaskScheduler
-#pragma warning restore CA1849 // Synchronous block in a Task returning method
+                    tcs.SetCanceled();
+                }
+                else
+                {
+                    tcs.SetResult();
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                _openConnectionSemaphore.Release(1);
+                tcs.SetCanceled();
             }
             catch (Exception ex)
             {
