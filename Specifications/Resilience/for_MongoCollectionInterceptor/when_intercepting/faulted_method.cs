@@ -14,8 +14,7 @@ public class faulted_method : given.an_interceptor
     async Task Because()
     {
         interceptor.Intercept(invocation.Object);
-        var exceptions = (AggregateException)await Catch.Exception(async () => await return_value);
-        exception = exceptions.InnerExceptions.Single();
+        exception = await Catch.Exception(async () => await return_value);
     }
 
     [Fact] void should_be_faulted() => return_value.IsFaulted.ShouldBeTrue();
