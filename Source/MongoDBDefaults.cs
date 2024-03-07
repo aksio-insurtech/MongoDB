@@ -79,7 +79,7 @@ public static class MongoDBDefaults
             BsonSerializer
                 .RegisterSerializationProvider(new DerivedTypeSerializerProvider(derivedTypes, jsonSerializerOptions));
 
-            RegisterConventionAsPack(conventionPackFilters, AcronymFriendlyCamelCaseElementNameConvention.ConventionName, new AcronymFriendlyCamelCaseElementNameConvention());
+            RegisterConventionAsPack(conventionPackFilters, ConventionPacks.CamelCase, new CamelCaseElementNameConvention());
             RegisterConventionAsPack(conventionPackFilters, ConventionPacks.IgnoreExtraElements, new IgnoreExtraElementsConvention(true));
             RegisterConventionAsPack(conventionPackFilters, ConventionPacks.CustomObjectDiscriminator, new CustomDiscriminatorConvention(CustomObjectDiscriminatorConvention.Instance, derivedTypes.TypesWithDerivatives));
 
